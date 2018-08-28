@@ -14,5 +14,3 @@ for currentThread in range(5):
     thread = threading.Thread(target=work_for_thread, args=(currentThread,))
     # Start the thread.
     thread.start()
-
-print("Thread Enumeration: {}".format(threading.enumerate()))
