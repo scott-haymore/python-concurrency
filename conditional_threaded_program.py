@@ -3,7 +3,7 @@ from threading import Condition
 import random
 import time
 
-count = 10
+MAX_ITEMS = 10
 
 class Consumer(Thread):
     def __init__(self, cond_var, list_items):
@@ -15,18 +15,21 @@ class Consumer(Thread):
 
     def run(self):
         # Iterate over some finite range.
-        for x in range(count):
+        for x in range(MAX_ITEMS): 
             # Acquire the lock.
             with self.cond_var:
-                # Wait for notification that the item is ready.
-                self.cond_var.wait()
+                # The wait method can return after some period of time. If
+                # the item hasn't been produced, the thread needs to continue
+                # waiting.
+                while not self.list_items:
+                    # Wait for notification that the item is ready.
+                    self.cond_var.wait()
                 # Pop the item off the list.
                 some_item = self.list_items.pop()
                 # Finally consume the item in some way.
                 print("Consuming: {}".format(some_item))
 
 class Producer(Thread):
-
     def __init__(self, cond_var, list_items):
         # The consumer will acquire the lock using this condition variable.
         self.cond_var = cond_var
@@ -36,7 +39,7 @@ class Producer(Thread):
         
     def run(self):
         # Iterate over some finite range.
-        for x in range(count):
+        for x in range(MAX_ITEMS):
             # Acquire the lock.
             with self.cond_var:
                 # Generate some random integer between one and ten.
