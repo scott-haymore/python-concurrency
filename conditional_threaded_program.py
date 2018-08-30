@@ -14,7 +14,7 @@ class Consumer(Thread):
         Thread.__init__(self)
 
     def run(self):
-        # Iterate over some finite number.
+        # Iterate over some finite range.
         for x in range(count):
             # Acquire the lock.
             with self.cond_var:
@@ -35,7 +35,7 @@ class Producer(Thread):
         Thread.__init__(self)
         
     def run(self):
-        # Iterate over some finite number.
+        # Iterate over some finite range.
         for x in range(count):
             # Acquire the lock.
             with self.cond_var:
